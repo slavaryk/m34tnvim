@@ -14,3 +14,4 @@ Lsp:
 		- @vue/language-server
 			npm install -g @vue/language-server
 		- @vue/typescript-plugin
+			npm install -g @vue/typescript-plugin
