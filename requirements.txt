@@ -1,0 +1,16 @@
+Telescope:
+ - ripgrep to grep strings in working directory (brew install ripgrep)
+
+Lsp:
+	1) lua
+		- lua-language-server
+			brew install lua-language-server
+
+	2) typescript
+		- typescript-language-server
+			npm install -g typescript typescript-language-server
+
+	3) vue
+		- @vue/language-server
+			npm install -g @vue/language-server
+		- @vue/typescript-plugin
