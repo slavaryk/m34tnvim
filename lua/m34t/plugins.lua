@@ -25,4 +25,8 @@ return {
   {
 	  "neovim/nvim-lspconfig",
   },
+  {
+    "lewis6991/gitsigns.nvim",
+    lazy = true,
+  },
 }
