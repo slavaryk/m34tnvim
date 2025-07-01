@@ -5,4 +5,5 @@ gitsigns.setup({
     add = { text = "a┃" },
     change = { text = "c┃" },
   },
+  current_line_blame = true,
 })
