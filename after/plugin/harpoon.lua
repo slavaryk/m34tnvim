@@ -1,50 +1,54 @@
 local harpoon = require("harpoon")
-local conf = require("telescope.config").values
+local telescope_config = require("telescope.config").values
+local telescope_finders = require("telescope.finders")
+local telescope_pickers = require("telescope.pickers")
+local telescope_state = require("telescope.actions.state")
 
 -- REQUIRED
 harpoon:setup()
 -- REQUIRED
 
-local function toggle_telescope(harpoon_files)
-  local file_paths = {}
+local function get_paths(files)
+  local paths = {}
+  local items = files.items
+  local len = files._length
+  local index = 1
 
-  for _, item in ipairs(harpoon_files.items) do
-    table.insert(file_paths, item.value)
-  end
+  for i = 1, len do
+    local item = items[i]
 
-  local make_finder = function()
-    local paths = {}
-
-    for _, item in ipairs(harpoon_files.items) do
-      table.insert(paths, item.value)
+    if item ~= nil then
+      paths[index] = item.value
+      index = index + 1
     end
-
-    return require("telescope.finders").new_table({
-      results = paths,
-    })
   end
 
-  require("telescope.pickers").new({}, {
+  return paths
+end
+
+local make_finder = function(paths)
+  return telescope_finders.new_table({ results = paths })
+end
+
+local function toggle_telescope(harpoon_files)
+  local file_paths = get_paths(harpoon_files)
+
+  telescope_pickers.new({}, {
     prompt_title = "Harpoon",
-    finder = require("telescope.finders").new_table({
-      results = file_paths,
-    }),
-    previewer = conf.file_previewer({}),
-    sorter = conf.generic_sorter({}),
+    finder = make_finder(file_paths),
+    previewer = telescope_config.file_previewer({}),
+    sorter = telescope_config.generic_sorter({}),
     layout_strategy = "center",
     initial_mode = "normal",
-    previewer = false,
     attach_mappings = function(prompt_buffer_number, map)
       -- Remove entry
       map("n", "<C-d>", function()
-        local state = require("telescope.actions.state")
-        local selected_entry = state.get_selected_entry()
-        local current_picker = state.get_current_picker(prompt_buffer_number)
+        local selected_entry = telescope_state.get_selected_entry()
+        local current_picker = telescope_state.get_current_picker(prompt_buffer_number)
 
         harpoon:list():remove(selected_entry)
-        current_picker:refresh(make_finder())
-      end
-    )
+        current_picker:refresh(make_finder(get_paths(harpoon:list())))
+      end)
 
     return true
   end,
