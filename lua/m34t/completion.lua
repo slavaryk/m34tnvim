@@ -4,11 +4,11 @@ vim.opt.completeopt = { "menu", "menuone", "noinsert" }
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
-    ---Utility for keymap creation.
-    ---@param lhs string
-    ---@param rhs string|function
-    ---@param opts string|table
-    ---@param mode? string|string[]
+    -- Utility for keymap creation.
+    -- @param lhs string
+    -- @param rhs string|function
+    -- @param opts string|table
+    -- @param mode? string|string[]
     local function keymap(lhs, rhs, opts, mode)
       opts = type(opts) == "string" and { desc = opts }
       or vim.tbl_extend("error", opts --[[@as table]], { buffer = args.buf })
@@ -16,13 +16,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.keymap.set(mode, lhs, rhs, opts)
     end
 
-    ---For replacing certain <C-x>... keymaps.
-    ---@param keys string
+    -- For replacing certain <C-x>... keymaps.
+    -- @param keys string
     local function feedkeys(keys)
       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), "n", true)
     end
 
-    ---Is the completion menu open?
+    -- Is the completion menu open?
     local function pumvisible()
       return tonumber(vim.fn.pumvisible()) ~= 0
     end

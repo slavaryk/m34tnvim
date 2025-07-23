@@ -3,7 +3,6 @@ vim.lsp.config("luals", {
     print("luals running in background")
   end,
   on_attach = function()
-    print("luals is attached to this file")
   end,
 })
 vim.lsp.enable("luals")
@@ -13,7 +12,6 @@ vim.lsp.config("tsls", {
     print("tsls is running in backround")
   end,
   on_attach = function()
-    print("tsls is attached to this file")
   end,
 })
 vim.lsp.enable("tsls")
@@ -23,7 +21,6 @@ vim.lsp.config("vuels", {
     print("vuels is running in backround")
   end,
   on_attach = function()
-    print("vuels is attached to this file")
   end,
 })
 vim.lsp.enable("vuels")
