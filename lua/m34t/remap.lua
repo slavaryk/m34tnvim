@@ -15,3 +15,9 @@ vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "Jump to next error" })
 vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, { desc = "Jump to prev error" })
+
+vim.keymap.set("n", "<leader>pc", function()
+  vim.fn.setreg("+", vim.fn.expand("%:."))
+end, { desc = "Copy relative path to current file" })
+
+vim.keymap.set("n", "<leader>pcw", "\"+yiw", { desc = "Copy word under the cursor to clipboard" })
