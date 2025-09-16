@@ -36,13 +36,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     -- Enable completion and configure keybindings.
     if client:supports_method("textDocument/completion") then
-      -- Enable completion on every char hit in insert mode
-      vim.api.nvim_create_autocmd("InsertCharPre", {
-        callback = function()
-          vim.lsp.completion.get()
-        end,
-      })
-
       vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
 
       -- Use enter to accept completions.
