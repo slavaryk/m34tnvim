@@ -55,8 +55,13 @@ local function toggle_telescope(harpoon_files)
       -- Remove entry
       map("n", "<C-d>", function()
         local selected_entry = telescope_state.get_selected_entry()
+        local selected_entry_index = selected_entry.index
         local current_picker = telescope_state.get_current_picker(prompt_buffer_number)
         local selection_row = current_picker:get_selection_row()
+
+        if selected_entry_index + 1 > harpoon:list()._length then
+          selection_row = selection_row + 1
+        end
 
         harpoon:list():remove(selected_entry)
 
@@ -89,8 +94,6 @@ local function toggle_telescope(harpoon_files)
       map("n", "<C-j>", function()
         local selected_entry = telescope_state.get_selected_entry()
         local selected_entry_index = selected_entry.index
-
-        -- print(selected_entry_index)
 
         if selected_entry_index - 1 == 0 then
           return
