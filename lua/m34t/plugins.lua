@@ -32,4 +32,8 @@ return {
   {
     "nvim-lualine/lualine.nvim",
   },
+  {
+    "tpope/vim-abolish",
+    lazy = true,
+  },
 }
