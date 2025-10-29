@@ -61,62 +61,70 @@ local function toggle_telescope(harpoon_files)
       -- Remove entry
       map("n", "<C-d>", function()
         local selected_entry = telescope_state.get_selected_entry()
-        local selected_entry_index = selected_entry.index
-        local current_picker = telescope_state.get_current_picker(prompt_buffer_number)
-        local selection_row = current_picker:get_selection_row()
 
-        if selected_entry_index + 1 > harpoon:list()._length then
-          selection_row = selection_row + 1
+        if selected_entry ~= nil then
+          local selected_entry_index = selected_entry.index
+          local current_picker = telescope_state.get_current_picker(prompt_buffer_number)
+          local selection_row = current_picker:get_selection_row()
+
+          if selected_entry_index + 1 > harpoon:list()._length then
+            selection_row = selection_row + 1
+          end
+
+          harpoon:list():remove(selected_entry)
+
+          select_after_refresh(current_picker, selection_row)
+          current_picker:refresh(make_finder(get_paths(harpoon:list())))
         end
-
-        harpoon:list():remove(selected_entry)
-
-        select_after_refresh(current_picker, selection_row)
-        current_picker:refresh(make_finder(get_paths(harpoon:list())))
       end)
 
       -- Swap current entry with next entry
       map("n", "<C-k>", function()
         local selected_entry = telescope_state.get_selected_entry()
-        local selected_entry_index = selected_entry.index
 
-        if selected_entry_index + 1 > harpoon:list()._length then
-          return
+        if selected_entry ~= nil then
+          local selected_entry_index = selected_entry.index
+
+          if selected_entry_index + 1 > harpoon:list()._length then
+            return
+          end
+
+          local current_picker = telescope_state.get_current_picker(prompt_buffer_number)
+          local selection_row = current_picker:get_selection_row()
+          local next_entry = table.remove(harpoon_files.items, selected_entry_index + 1)
+          local curr_entry = table.remove(harpoon_files.items, selected_entry_index)
+
+          table.insert(harpoon_files.items, selected_entry_index, next_entry)
+          table.insert(harpoon_files.items, selected_entry_index + 1, curr_entry)
+
+          select_after_refresh(current_picker, selection_row - 1)
+          current_picker:refresh(make_finder(get_paths(harpoon:list())))
         end
-
-        local current_picker = telescope_state.get_current_picker(prompt_buffer_number)
-        local selection_row = current_picker:get_selection_row()
-        local next_entry = table.remove(harpoon_files.items, selected_entry_index + 1)
-        local curr_entry = table.remove(harpoon_files.items, selected_entry_index)
-
-        table.insert(harpoon_files.items, selected_entry_index, next_entry)
-        table.insert(harpoon_files.items, selected_entry_index + 1, curr_entry)
-
-        select_after_refresh(current_picker, selection_row - 1)
-        current_picker:refresh(make_finder(get_paths(harpoon:list())))
       end)
 
       -- Swap current entry with prev entry
       map("n", "<C-j>", function()
         local selected_entry = telescope_state.get_selected_entry()
-        local selected_entry_index = selected_entry.index
 
-        if selected_entry_index - 1 == 0 then
-          return
+        if selected_entry ~= nil then
+          local selected_entry_index = selected_entry.index
+
+          if selected_entry_index - 1 == 0 then
+            return
+          end
+
+          local current_picker = telescope_state.get_current_picker(prompt_buffer_number)
+          local selection_row = current_picker:get_selection_row()
+          local curr_entry = table.remove(harpoon_files.items, selected_entry_index)
+          local prev_entry = table.remove(harpoon_files.items, selected_entry_index)
+
+          table.insert(harpoon_files.items, selected_entry_index, prev_entry)
+          table.insert(harpoon_files.items, selected_entry_index - 1, curr_entry)
+
+          select_after_refresh(current_picker, selection_row + 1)
+          current_picker:refresh(make_finder(get_paths(harpoon:list())))
         end
-
-        local current_picker = telescope_state.get_current_picker(prompt_buffer_number)
-        local selection_row = current_picker:get_selection_row()
-        local curr_entry = table.remove(harpoon_files.items, selected_entry_index)
-        local prev_entry = table.remove(harpoon_files.items, selected_entry_index)
-
-        table.insert(harpoon_files.items, selected_entry_index, prev_entry)
-        table.insert(harpoon_files.items, selected_entry_index - 1, curr_entry)
-
-        select_after_refresh(current_picker, selection_row + 1)
-        current_picker:refresh(make_finder(get_paths(harpoon:list())))
       end)
-
 
     return true
   end,
